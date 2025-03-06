@@ -1,0 +1,42 @@
+# compute similarity between two documents.
+import numpy as np
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
+
+def cosine_similarity(x, y):
+    # Ensure length of x and y are the same
+    if len(x) != len(y):
+        return None
+
+    # Compute the dot product between x and y
+    dot_product = np.dot(x, y)
+
+    # Compute the L2 norms (magnitudes) of x and y
+    magnitude_x = np.sqrt(np.sum(x ** 2))
+    magnitude_y = np.sqrt(np.sum(y ** 2))
+
+    # Compute the cosine similarity
+    return dot_product / (magnitude_x * magnitude_y)
+
+# Corpus of text documents
+corpus = [
+    'Data Science is one of the most important fields of science',
+    'This is one of the best data science courses',
+    'Data Scientists analyse data'
+]
+
+# Create a matrix to represent the corpus
+X = CountVectorizer().fit_transform(corpus).toarray()
+print(X)
+
+# Compute cosine similarity between document pairs
+cos_sim_1_2 = cosine_similarity(X[0, :], X[1, :])
+cos_sim_1_3 = cosine_similarity(X[0, :], X[2, :])
+cos_sim_2_3 = cosine_similarity(X[1, :], X[2, :])
+
+# Print the results
+print('Cosine Similarity between:')
+print('Document 1 and Document 2:', cos_sim_1_2)
+print('Document 1 and Document 3:', cos_sim_1_3)
+print('Document 2 and Document 3:', cos_sim_2_3)
